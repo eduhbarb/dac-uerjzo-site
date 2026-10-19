@@ -503,6 +503,130 @@ p { margin: 0; }
 }
 
 /* =========================================================
+   2. RECEPÇÃO DE CALOUROS
+   ========================================================= */
+
+.calouros {
+  border-top: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(224, 7, 0, 0.12), transparent 55%),
+    radial-gradient(ellipse at 0% 60%, rgba(224, 7, 0, 0.05), transparent 45%);
+}
+
+.calouros-layout {
+  display: grid;
+  gap: 34px;
+  margin-top: 36px;
+}
+
+.calouros-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.calouros-lead {
+  max-width: 44ch;
+  font-size: clamp(0.9rem, 3.5vw, 1rem);
+  color: #cfc8be;
+}
+
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 2px 0 0;
+}
+
+.fact {
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(243, 238, 227, 0.03);
+}
+
+.fact dt {
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+}
+
+.fact dd {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--paper);
+}
+
+.calouros-note {
+  padding-left: 14px;
+  border-left: 3px solid var(--red);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.calouros-aside .btn { width: 100%; }
+
+.calouros-main { min-width: 0; }
+.calouros-main .faq-list { margin-top: 0; }
+
+.tips {
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.tips-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 4.6vw, 1.6rem);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tips-grid {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tip {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(150deg, rgba(224, 7, 0, 0.09), rgba(243, 238, 227, 0.015));
+}
+
+.tip strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+}
+
+.tip p {
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* =========================================================
    3. MEMBROS
    ========================================================= */
 
@@ -748,12 +872,29 @@ p { margin: 0; }
 
 .faq-answer-inner { overflow: hidden; }
 
-.faq-answer-inner p {
+.faq-answer-inner > * {
   max-width: 62ch;
-  padding: 0 46px 22px 0;
+  padding-right: 46px;
   color: #c3bcb2;
   font-size: clamp(0.86rem, 3.4vw, 0.96rem);
   line-height: 1.65;
+}
+
+.faq-answer-inner > :last-child { padding-bottom: 22px; }
+
+.faq-answer-inner > * + * { margin-top: 12px; }
+
+.faq-answer-inner ul,
+.faq-answer-inner ol {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.faq-answer-inner li + li { margin-top: 7px; }
+
+.faq-answer-inner strong {
+  color: var(--paper);
+  font-weight: 700;
 }
 
 .faq-answer a {
@@ -892,6 +1033,7 @@ p { margin: 0; }
   .product-grid { gap: 16px; }
   .product-info { padding: 16px 18px 22px; }
   .product-info p { font-size: 0.82rem; }
+  .tips-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-main { grid-template-columns: 1fr 1fr; }
   .footer-place { text-align: right; }
 }
@@ -911,6 +1053,18 @@ p { margin: 0; }
   .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; }
 }
 
+@media (min-width: 900px) {
+  .calouros-layout {
+    grid-template-columns: 330px minmax(0, 1fr);
+    gap: 46px;
+    align-items: start;
+  }
+  .calouros-aside {
+    position: sticky;
+    top: 24px;
+  }
+}
+
 @media (min-width: 1024px) {
   .hero { min-height: 100svh; }
   .hero-inner { padding-left: calc(132px + 44px); }
@@ -924,7 +1078,7 @@ p { margin: 0; }
     padding-inline: max(var(--page-pad), calc((100vw - 1180px) / 2 + var(--page-pad)));
     scroll-padding-left: max(var(--page-pad), calc((100vw - 1180px) / 2 + var(--page-pad)));
   }
-  .faq-answer-inner p { padding-right: 80px; }
+  .faq-answer-inner > * { padding-right: 80px; }
 }
 
 @media (max-width: 359px) {

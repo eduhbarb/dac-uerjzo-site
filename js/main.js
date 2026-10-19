@@ -3,11 +3,11 @@
   "use strict";
 
   /* ---------- FAQ ---------- */
-  var faqRoot = document.querySelector("[data-faq]");
+  var faqRoots = document.querySelectorAll("[data-faq]");
 
-  if (faqRoot) {
+  Array.prototype.forEach.call(faqRoots, function (root) {
     var questions = Array.prototype.slice.call(
-      faqRoot.querySelectorAll(".faq-question")
+      root.querySelectorAll(".faq-question")
     );
 
     questions.forEach(function (button) {
@@ -24,7 +24,7 @@
         button.closest(".faq-item").classList.toggle("is-open", !isOpen);
       });
     });
-  }
+  });
 
   /* ---------- Carrossel de membros ---------- */
   var track = document.querySelector("[data-carousel-track]");
