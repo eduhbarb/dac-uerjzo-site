@@ -599,7 +599,7 @@ p { margin: 0; }
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 24px;
   background: var(--surface);
   border: 1px solid rgba(243, 238, 227, 0.16);
 }
