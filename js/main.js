@@ -68,6 +68,11 @@
     var startX = 0;
     var startScroll = 0;
 
+    /* Bloqueia o arraste nativo de imagens/links: o mouse arrasta o carrossel */
+    track.addEventListener("dragstart", function (event) {
+      event.preventDefault();
+    });
+
     track.addEventListener("pointerdown", function (event) {
       if (event.pointerType !== "mouse") return;
       dragging = true;
@@ -100,6 +105,9 @@
           track.removeEventListener("click", swallow, true);
         };
         track.addEventListener("click", swallow, true);
+        window.setTimeout(function () {
+          track.removeEventListener("click", swallow, true);
+        }, 50);
       }
     };
 
@@ -107,6 +115,52 @@
     track.addEventListener("pointerleave", stopDrag);
     track.addEventListener("pointercancel", stopDrag);
   }
+
+  /* ---------- Modais de fluxograma ---------- */
+  var modalTriggers = document.querySelectorAll("[data-open-modal]");
+  var flowModals = document.querySelectorAll(".flow-modal");
+
+  var closeFlowModal = function (dialog) {
+    if (typeof dialog.close === "function") dialog.close();
+    else {
+      dialog.removeAttribute("open");
+      document.body.classList.remove("is-locked");
+    }
+  };
+
+  Array.prototype.forEach.call(modalTriggers, function (trigger) {
+    trigger.addEventListener("click", function () {
+      var dialog = document.getElementById(trigger.getAttribute("data-open-modal"));
+      if (!dialog) return;
+
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+
+      document.body.classList.add("is-locked");
+
+      var scroller = dialog.querySelector(".flow-scroll");
+      if (scroller) scroller.scrollTop = 0;
+    });
+  });
+
+  Array.prototype.forEach.call(flowModals, function (dialog) {
+    dialog.addEventListener("click", function (event) {
+      if (event.target === dialog) closeFlowModal(dialog);
+    });
+
+    dialog.addEventListener("close", function () {
+      document.body.classList.remove("is-locked");
+    });
+
+    Array.prototype.forEach.call(
+      dialog.querySelectorAll("[data-close-modal]"),
+      function (button) {
+        button.addEventListener("click", function () {
+          closeFlowModal(dialog);
+        });
+      }
+    );
+  });
 
   /* ---------- Revelação no scroll ---------- */
   var revealItems = document.querySelectorAll(".reveal");
