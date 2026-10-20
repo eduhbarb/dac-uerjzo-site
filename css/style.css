@@ -328,7 +328,12 @@ p { margin: 0; }
   text-wrap: balance;
 }
 
-.hero-line { display: block; }
+.hero-line { 
+  display: block; /* Garante que o texto seja visível sobre a sombra */
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.123),
+    0 0 10px rgba(0, 0, 0, 0.103); 
+}
 
 .hero-line--small {
   font-size: 0.64em;
