@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0909">
+  <meta name="description" content="Ouvidoria do DAC UERJ ZO: formulário anônimo para denúncias, queixas e elogios de estudantes de CC e TADS da UERJ Zona Oeste.">
+  <title>Ouvidoria — DAC UERJ ZO</title>
+  <link rel="icon" href="assets/dac-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/page-transition.js"></script>
+</head>
+<body class="subpage">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="subpage-head">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="DAC UERJ ZO — página inicial">
+        <img class="brand-logo" src="assets/dac-logo.png" alt="Logo do DAC UERJ ZO" width="150" height="150">
+        <span class="brand-text">
+          <strong>DAC</strong>
+          <span>UERJ ZO</span>
+        </span>
+      </a>
+      <a class="hero-social" href="index.html">← Voltar ao site</a>
+    </div>
+  </header>
+
+  <main class="subpage-main subpage-main--ouvidoria" id="conteudo">
+    <div class="container">
+      <div class="ouvidoria-hero">
+        <div class="ouvidoria-intro">
+          <p class="kicker"><span class="kicker-mark" aria-hidden="true"></span>Denúncias, queixas e elogios · CC e TADS</p>
+          <h1>Ouvidoria<br><span class="text-red">do DAC</span></h1>
+          <div class="rule" aria-hidden="true"></div>
+          <p class="section-lead">Canal para relatar problemas que afetam estudantes de Ciência da Computação e TADS da UERJ Zona Oeste. Você não precisa se identificar, criar conta ou informar e-mail.</p>
+          <ul class="ouvidoria-tags" aria-label="Características do canal">
+            <li>Anônimo</li>
+            <li>Sem login</li>
+            <li>CC e TADS</li>
+          </ul>
+        </div>
+
+        <aside class="ouvidoria-hero-note">
+          <p class="ouvidoria-note-title">Antes de preencher</p>
+          <ul>
+            <li>Não pedimos nome, e-mail ou matrícula.</li>
+            <li>Evite incluir dados pessoais de terceiros.</li>
+            <li>Descreva o que aconteceu, quando e onde.</li>
+            <li>O relato pode ser uma denúncia, uma queixa ou um elogio.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="ouvidoria-layout">
+        <section class="ouvidoria-card" aria-labelledby="ouvidoria-form-titulo">
+          <div class="ouvidoria-card-head">
+            <p class="kicker"><span class="kicker-mark" aria-hidden="true"></span>Formulário anônimo</p>
+            <h2 class="ouvidoria-card-title" id="ouvidoria-form-titulo">Registre sua manifestação</h2>
+            <p class="ouvidoria-card-copy">Escolha o tipo de manifestação e a categoria. Os campos marcados com <span class="ouvidoria-required">*</span> são obrigatórios.</p>
+            <p class="ouvidoria-dev-note">Etapa de implantação: o formulário valida o preenchimento, mas o envio ainda não está conectado a uma base de dados. Nenhum dado é transmitido.</p>
+          </div>
+
+          <form class="ouvidoria-form" method="post" data-ouvidoria-form>
+            <fieldset class="ouvidoria-fieldset">
+              <legend class="ouvidoria-legend">Tipo de manifestação <span class="ouvidoria-required">*</span></legend>
+              <p class="ouvidoria-hint">Selecione a opção que melhor representa o seu relato.</p>
+
+              <div class="ouvidoria-types">
+                <label class="ouvidoria-type">
+                  <input type="radio" name="tipo" value="Denúncia" required>
+                  <span class="ouvidoria-type-body">
+                    <strong>Denúncia</strong>
+                    <small>Conduta grave, assédio, discriminação, fraude ou irregularidade.</small>
+                  </span>
+                </label>
+                <label class="ouvidoria-type">
+                  <input type="radio" name="tipo" value="Queixa" required>
+                  <span class="ouvidoria-type-body">
+                    <strong>Queixa</strong>
+                    <small>Problema com disciplina, atendimento, infraestrutura ou comunicação.</small>
+                  </span>
+                </label>
+                <label class="ouvidoria-type">
+                  <input type="radio" name="tipo" value="Elogio" required>
+                  <span class="ouvidoria-type-body">
+                    <strong>Elogio</strong>
+                    <small>Reconhecimento de professor, turma, projeto ou atendimento.</small>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="ouvidoria-row">
+              <div class="ouvidoria-field">
+                <label class="ouvidoria-label" for="ouvidoria-categoria">Categoria <span class="ouvidoria-required">*</span></label>
+                <div class="ouvidoria-select-wrap">
+                  <select class="ouvidoria-select" id="ouvidoria-categoria" name="categoria" required>
+                    <option value="" selected disabled>Selecione uma categoria</option>
+                    <option value="ensino">Ensino e disciplinas</option>
+                    <option value="professores">Professores e conduta</option>
+                    <option value="infraestrutura">Infraestrutura e campus</option>
+                    <option value="secretaria">Matrícula e secretaria</option>
+                    <option value="seguranca">Segurança</option>
+                    <option value="assedio">Assédio ou discriminação</option>
+                    <option value="eventos">Eventos, comunicação e merch</option>
+                    <option value="outro">Outro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="ouvidoria-field">
+                <label class="ouvidoria-label" for="ouvidoria-curso">Curso</label>
+                <div class="ouvidoria-select-wrap">
+                  <select class="ouvidoria-select" id="ouvidoria-curso" name="curso">
+                    <option value="">Prefiro não informar</option>
+                    <option value="cc">Ciência da Computação</option>
+                    <option value="tads">TADS</option>
+                    <option value="outro">Outro vínculo</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="ouvidoria-field" id="ouvidoria-outro-wrap" hidden>
+              <label class="ouvidoria-label" for="ouvidoria-outro">Qual categoria? <span class="ouvidoria-required">*</span></label>
+              <input class="ouvidoria-input" type="text" id="ouvidoria-outro" name="outro_categoria" maxlength="80" placeholder="Descreva a categoria do seu relato">
+            </div>
+
+            <div class="ouvidoria-row">
+              <div class="ouvidoria-field">
+                <label class="ouvidoria-label" for="ouvidoria-local">Onde ocorreu?</label>
+                <input class="ouvidoria-input" type="text" id="ouvidoria-local" name="local" maxlength="120" placeholder="Sala, bloco, setor ou online">
+              </div>
+
+              <div class="ouvidoria-field">
+                <label class="ouvidoria-label" for="ouvidoria-data">Quando ocorreu?</label>
+                <input class="ouvidoria-input" type="date" id="ouvidoria-data" name="data">
+              </div>
+            </div>
+
+            <div class="ouvidoria-field">
+              <div class="ouvidoria-label-row">
+                <label class="ouvidoria-label" for="ouvidoria-relato">Relato <span class="ouvidoria-required">*</span></label>
+                <span class="ouvidoria-counter" data-ouvidoria-counter>0 / 2000</span>
+              </div>
+              <textarea class="ouvidoria-textarea" id="ouvidoria-relato" name="relato" rows="7" minlength="30" maxlength="2000" required placeholder="Conte o que aconteceu com o máximo de detalhes que se sentir confortável em compartilhar." data-ouvidoria-relato></textarea>
+              <p class="ouvidoria-hint">Mínimo de 30 caracteres. Não inclua nomes, telefones ou outros dados pessoais de terceiros.</p>
+            </div>
+
+            <div class="ouvidoria-check">
+              <input type="checkbox" id="ouvidoria-ciencia" name="ciencia" required>
+              <label for="ouvidoria-ciencia">Entendo que este canal não substitui um boletim de ocorrência, a ouvidoria oficial da UERJ ou os canais de emergência, e que devo evitar expor dados pessoais de outras pessoas.</label>
+            </div>
+
+            <div class="ouvidoria-actions">
+              <button class="btn btn--red" type="submit">Enviar manifestação <span aria-hidden="true">↗</span></button>
+              <button class="ouvidoria-reset" type="reset">Limpar formulário</button>
+            </div>
+
+            <p class="ouvidoria-privacy">Este formulário não solicita identificação. Para preservar o anonimato, não escreva seu nome, e-mail, matrícula ou outros dados que possam identificar você.</p>
+
+            <div class="ouvidoria-status" role="status" aria-live="polite" tabindex="-1" data-ouvidoria-status hidden></div>
+          </form>
+        </section>
+
+        <aside class="ouvidoria-side" aria-label="Orientações sobre a ouvidoria">
+          <article class="ouvidoria-side-card">
+            <p class="ouvidoria-side-title">Como preencher</p>
+            <ol class="ouvidoria-steps">
+              <li>
+                <span aria-hidden="true">01</span>
+                <p>Escolha se o relato é uma denúncia, uma queixa ou um elogio.</p>
+              </li>
+              <li>
+                <span aria-hidden="true">02</span>
+                <p>Selecione a categoria. Se nada se encaixar, use <strong>Outro</strong>.</p>
+              </li>
+              <li>
+                <span aria-hidden="true">03</span>
+                <p>Descreva o ocorrido com datas, locais e pessoas envolvidas, sem expor dados pessoais.</p>
+              </li>
+            </ol>
+          </article>
+
+          <article class="ouvidoria-side-card">
+            <p class="ouvidoria-side-title">O que acontece depois</p>
+            <p class="ouvidoria-side-copy">Quando o envio estiver ativo, a equipe do DAC vai ler as manifestações e encaminhar os casos para a instância adequada. Como o canal é anônimo, não é possível responder individualmente a quem enviou.</p>
+          </article>
+
+          <article class="ouvidoria-side-card ouvidoria-side-card--warn">
+            <p class="ouvidoria-side-title">Emergência</p>
+            <p class="ouvidoria-side-copy">Em situação de risco imediato, procure a Polícia Militar pelo <strong>190</strong> ou a segurança do campus. Para casos urgentes de saúde, ligue <strong>192</strong>.</p>
+          </article>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© <span data-year>2026</span> DAC UERJ ZO. Todos os direitos reservados.</p>
+        <p class="footer-credit">Desenvolvido por <strong>Eduardo Barbosa</strong></p>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -5,3 +5,6 @@ backup/
 imagens participantes/
 exemplo de design.png
 dac logo.png
+
+# Planilhas Excel (não publicar)
+*.xlsx
