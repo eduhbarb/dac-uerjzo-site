@@ -919,6 +919,65 @@
     updateOuvidoriaCounter();
   }
 
+  /* ---------- Menu flutuante dos acessos rápidos ---------- */
+  var navFab = document.querySelector("[data-nav-fab]");
+  var quickNav = document.querySelector("[data-quick-nav]");
+  var navScrim = document.querySelector("[data-nav-scrim]");
+
+  if (navFab && quickNav) {
+    var navIsOpen = false;
+
+    var setQuickNav = function (open) {
+      navIsOpen = open;
+      navFab.setAttribute("aria-expanded", String(open));
+      navFab.setAttribute("aria-label", open ? "Fechar acessos rápidos" : "Abrir acessos rápidos");
+      quickNav.classList.toggle("is-open", open);
+      if (navScrim) {
+        navScrim.classList.toggle("is-open", open);
+        navScrim.setAttribute("aria-hidden", String(!open));
+      }
+    };
+
+    navFab.addEventListener("click", function () {
+      setQuickNav(!navIsOpen);
+    });
+
+    if (navScrim) {
+      navScrim.addEventListener("click", function () {
+        setQuickNav(false);
+      });
+    }
+
+    quickNav.addEventListener("click", function (event) {
+      if (event.target.closest("a")) setQuickNav(false);
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!navIsOpen) return;
+      if (navFab.contains(event.target) || quickNav.contains(event.target)) return;
+      setQuickNav(false);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !navIsOpen) return;
+      setQuickNav(false);
+      navFab.focus();
+    });
+
+    var compactQuery = window.matchMedia
+      ? window.matchMedia("(min-width: 1024px)")
+      : null;
+
+    if (compactQuery) {
+      var handleCompactChange = function (event) {
+        if (event.matches) setQuickNav(false);
+      };
+
+      if (compactQuery.addEventListener) compactQuery.addEventListener("change", handleCompactChange);
+      else if (compactQuery.addListener) compactQuery.addListener(handleCompactChange);
+    }
+  }
+
   /* ---------- Revelação no scroll ---------- */
   var revealItems = document.querySelectorAll(".reveal");
 

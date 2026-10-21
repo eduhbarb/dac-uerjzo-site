@@ -67,7 +67,9 @@
         </div>
       </div>
 
-      <nav class="hero-strips" aria-label="Acessos rápidos">
+      <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
+
+      <nav class="hero-strips" id="acessos-rapidos" data-quick-nav aria-label="Acessos rápidos">
         <a class="hero-strip" href="tccs.html">
           <span class="hero-strip-title">TCCs</span>
           <span class="hero-strip-desc">Confira os TCCs já concluídos</span>
@@ -109,6 +111,11 @@
       </div>
     </div>
   </header>
+
+  <button class="nav-fab" type="button" data-nav-fab aria-expanded="false" aria-controls="acessos-rapidos" aria-label="Abrir acessos rápidos">
+    <img class="nav-fab-logo" src="assets/dac-logo.png" alt="" width="150" height="150">
+    <span class="nav-fab-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
 
   <main>
     <!-- 2. RECEPÇÃO DE CALOUROS -->
