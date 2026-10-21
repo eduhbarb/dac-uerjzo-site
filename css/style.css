@@ -1806,6 +1806,7 @@ button.calendar-day {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.32s ease;
+  contain: layout paint;
 }
 
 .faq-answer-inner { overflow: hidden; }
@@ -3253,6 +3254,34 @@ body.is-locked { overflow: hidden; }
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Blocos altos no mobile: revela os filhos em cascata em vez da caixa inteira.
+   Cada pedaço pequeno é rasterizado separado, então nenhum frame carrega
+   a textura de uma coluna de milhares de pixels. */
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  .faq-list.reveal,
+  .calouros-aside.reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .faq-list.reveal .faq-item,
+  .calouros-aside.reveal > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.42s ease, transform 0.42s ease;
+    transition-delay: calc(min(var(--reveal-step, 0), 8) * 28ms);
+  }
+
+  .faq-list.reveal.is-visible .faq-item,
+  .calouros-aside.reveal.is-visible > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .faq-answer { transition-duration: 0.26s; }
 }
 
 /* =========================================================

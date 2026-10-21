@@ -981,6 +981,12 @@
   /* ---------- Revelação no scroll ---------- */
   var revealItems = document.querySelectorAll(".reveal");
 
+  Array.prototype.forEach.call(revealItems, function (item) {
+    Array.prototype.forEach.call(item.children, function (child, index) {
+      child.style.setProperty("--reveal-step", String(index));
+    });
+  });
+
   if ("IntersectionObserver" in window) {
     var observer = new IntersectionObserver(
       function (entries) {
