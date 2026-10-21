@@ -24,6 +24,13 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* Remove o realce azul/cinza que o navegador pinta ao tocar em elementos no celular. */
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
