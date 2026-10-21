@@ -614,6 +614,29 @@
     track.addEventListener("pointercancel", stopDrag);
   }
 
+  /* ---------- Cards de professores (clique/toque) ---------- */
+  var teacherCards = document.querySelectorAll(".teacher-card");
+
+  Array.prototype.forEach.call(teacherCards, function (card) {
+    card.addEventListener("click", function (event) {
+      if (event.target.closest("a")) return;
+
+      var willFlip = !card.classList.contains("is-flipped");
+      card.classList.toggle("is-flipped", willFlip);
+
+      if (!willFlip && card.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    });
+
+    card.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") return;
+
+      card.classList.remove("is-flipped");
+      if (card.contains(document.activeElement)) document.activeElement.blur();
+    });
+  });
+
   /* ---------- Modais de fluxograma ---------- */
   var modalTriggers = document.querySelectorAll("[data-open-modal]");
   var flowModals = document.querySelectorAll(".flow-modal");

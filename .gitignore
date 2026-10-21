@@ -8,3 +8,9 @@ dac logo.png
 
 # Planilhas Excel (não publicar)
 *.xlsx
+
+# Fotos originais dos professores (usar versões em assets/professores/)
+/professores/
+
+# Configuração local do OpenCode (não publicar)
+/.opencode/
