@@ -14,3 +14,7 @@ dac logo.png
 
 # Configuração local do OpenCode (não publicar)
 /.opencode/
+
+# Firebase CLI local
+firebase-debug.log*.firebase/
+
