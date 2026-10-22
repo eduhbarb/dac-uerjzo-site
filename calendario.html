@@ -53,6 +53,28 @@
     </div>
   </main>
 
+  <dialog class="calendar-modal" data-calendar-export aria-labelledby="calendar-export-title">
+    <div class="calendar-modal-inner">
+      <header class="calendar-modal-head">
+        <div class="calendar-modal-heading">
+          <p class="kicker"><span class="kicker-mark" aria-hidden="true"></span>Prévia da imagem</p>
+          <h2 class="calendar-modal-title" id="calendar-export-title">Exportar calendário</h2>
+          <p class="calendar-modal-meta" data-calendar-export-meta>Escolha baixar ou compartilhar.</p>
+        </div>
+        <button class="flow-close" type="button" data-calendar-export-close aria-label="Fechar prévia">×</button>
+      </header>
+      <div class="calendar-modal-body">
+        <div class="calendar-modal-preview">
+          <img data-calendar-export-image alt="Prévia da imagem do calendário com a data destacada">
+        </div>
+        <div class="calendar-modal-actions">
+          <a class="btn btn--red" data-calendar-export-download download>Baixar</a>
+          <button class="btn btn--ghost" type="button" data-calendar-export-share>Compartilhar</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
@@ -62,6 +84,7 @@
     </div>
   </footer>
 
+  <script src="js/calendario-export-logo.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

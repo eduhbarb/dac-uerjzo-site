@@ -299,8 +299,30 @@
     var tabButtons = [];
     var panels = [];
 
+    var exportButton = makeElement("button", "calendar-export", "Compartilhar data");
+    exportButton.type = "button";
+    exportButton.hidden = true;
+    exportButton.setAttribute("aria-label", "Compartilhar imagem do calendário");
+    document.body.appendChild(exportButton);
+
+    var updateExportButton = function () {
+      var scope = panels[activeIndex];
+      var selection = scope && scope.selection;
+
+      exportButton.hidden = !selection;
+
+      if (selection) {
+        exportButton.setAttribute(
+          "aria-label",
+          "Compartilhar imagem: " + selection.event.title + " — " + formatEventDate(selection.event)
+        );
+      }
+    };
+
     var activateTab = function (index, moveFocus) {
       if (!panels[index]) return;
+
+      activeIndex = index;
 
       tabButtons.forEach(function (button, buttonIndex) {
         var selected = buttonIndex === index;
@@ -311,6 +333,8 @@
       panels.forEach(function (scope, panelIndex) {
         scope.panel.hidden = panelIndex !== index;
       });
+
+      updateExportButton();
 
       if (moveFocus) tabButtons[index].focus();
     };
@@ -341,6 +365,9 @@
 
     var selectDate = function (scope, iso) {
       var matches = eventsForDate(scope.semester, iso);
+
+      scope.selection = matches.length ? { iso: iso, event: matches[0] } : null;
+      updateExportButton();
 
       clearSelection(scope);
 
@@ -379,6 +406,9 @@
       });
 
       if (!event) return;
+
+      scope.selection = { iso: event.start, event: event };
+      updateExportButton();
 
       clearSelection(scope);
       markEventButton(scope, event);
@@ -568,6 +598,7 @@
       var scope = {
         semester: semester,
         panel: panel,
+        selection: null,
         detailDate: detailDate,
         detailTitle: detailTitle,
         detailCopy: detailCopy,
@@ -610,6 +641,439 @@
     calendarRoot.textContent = "";
     calendarRoot.appendChild(tabsRoot);
     calendarRoot.appendChild(panelsRoot);
+
+    /* ---------- Exportação do calendário ---------- */
+
+    var exportModal = document.querySelector("[data-calendar-export]");
+    var exportImageElement = exportModal ? exportModal.querySelector("[data-calendar-export-image]") : null;
+    var exportMetaElement = exportModal ? exportModal.querySelector("[data-calendar-export-meta]") : null;
+    var exportDownloadLink = exportModal ? exportModal.querySelector("[data-calendar-export-download]") : null;
+    var exportShareButton = exportModal ? exportModal.querySelector("[data-calendar-export-share]") : null;
+    var exportCloseButton = exportModal ? exportModal.querySelector("[data-calendar-export-close]") : null;
+
+    var exportLogoPromise = null;
+    var exportBlob = null;
+    var exportFileName = "";
+
+    var loadExportLogo = function () {
+      if (!exportLogoPromise) {
+        exportLogoPromise = new Promise(function (resolve) {
+          var image = new Image();
+
+          image.onload = function () { resolve(image); };
+          image.onerror = function () { resolve(null); };
+          image.src = window.DAC_EXPORT_LOGO || "assets/dac-logo-branco.png";
+        });
+      }
+
+      return exportLogoPromise;
+    };
+
+    var prepareExportFonts = function () {
+      if (!document.fonts || !document.fonts.load) return Promise.resolve();
+
+      return Promise.all([
+        document.fonts.load('400 78px "Anton"'),
+        document.fonts.load('700 30px "Archivo"'),
+        document.fonts.load('800 22px "Archivo"')
+      ]).catch(function () { return null; });
+    };
+
+    var roundRectPath = function (ctx, x, y, width, height, radius) {
+      var r = Math.min(radius, width / 2, height / 2);
+
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + width - r, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+      ctx.lineTo(x + width, y + height - r);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+      ctx.lineTo(x + r, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    };
+
+    var wrapExportText = function (ctx, text, maxWidth) {
+      var words = text.split(/\s+/);
+      var lines = [];
+      var current = "";
+
+      words.forEach(function (word) {
+        var candidate = current ? current + " " + word : word;
+
+        if (!current || ctx.measureText(candidate).width <= maxWidth) {
+          current = candidate;
+          return;
+        }
+
+        lines.push(current);
+        current = word;
+      });
+
+      if (current) lines.push(current);
+      return lines;
+    };
+
+    var formatExportDate = function (event) {
+      var start = parseISO(event.start);
+      var end = parseISO(event.end || event.start);
+      var startMonth = longMonths[start.getMonth()];
+      var endMonth = longMonths[end.getMonth()];
+
+      if (toISO(start) === toISO(end)) {
+        return start.getDate() + " de " + startMonth + " de " + start.getFullYear();
+      }
+
+      if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
+        return start.getDate() + " a " + end.getDate() + " de " + startMonth + " de " + start.getFullYear();
+      }
+
+      if (start.getFullYear() === end.getFullYear()) {
+        return start.getDate() + " de " + startMonth + " a " + end.getDate() + " de " + endMonth + " de " + start.getFullYear();
+      }
+
+      return start.getDate() + " de " + startMonth + " de " + start.getFullYear() +
+        " a " + end.getDate() + " de " + endMonth + " de " + end.getFullYear();
+    };
+
+    var slugify = function (value) {
+      var text = value.normalize ? value.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : value;
+
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    };
+
+    var buildExportFileName = function (event) {
+      var start = parseISO(event.start);
+      var end = parseISO(event.end || event.start);
+      var dateSlug = start.getDate() + "-" + shortMonths[start.getMonth()];
+
+      if (toISO(start) !== toISO(end)) {
+        dateSlug += "-a-" + end.getDate() + "-" + shortMonths[end.getMonth()];
+      }
+
+      dateSlug += "-" + end.getFullYear();
+
+      return slugify(event.title) + "-" + dateSlug + "-dac-uerjzo.jpg";
+    };
+
+    var renderExportCanvas = function (semester, event, iso) {
+      return Promise.all([loadExportLogo(), prepareExportFonts()]).then(function (results) {
+        var logo = results[0];
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+        var width = 1080;
+        var height = 1350;
+        var padding = 72;
+        var contentWidth = width - padding * 2;
+        var selectedDate = parseISO(iso);
+        var year = selectedDate.getFullYear();
+        var monthIndex = selectedDate.getMonth();
+        var displayFont = '"Anton", "Arial Narrow", Impact, sans-serif';
+        var bodyFont = '"Archivo", "Helvetica Neue", Arial, sans-serif';
+
+        canvas.width = width;
+        canvas.height = height;
+
+        ctx.fillStyle = "#080707";
+        ctx.fillRect(0, 0, width, height);
+
+        var topGlow = ctx.createRadialGradient(width - 30, -150, 0, width - 30, -150, 980);
+        topGlow.addColorStop(0, "rgba(224, 7, 0, 0.44)");
+        topGlow.addColorStop(0.5, "rgba(224, 7, 0, 0.13)");
+        topGlow.addColorStop(1, "rgba(224, 7, 0, 0)");
+        ctx.fillStyle = topGlow;
+        ctx.fillRect(0, 0, width, height);
+
+        var bottomGlow = ctx.createRadialGradient(-140, height, 0, -140, height, 780);
+        bottomGlow.addColorStop(0, "rgba(156, 3, 0, 0.24)");
+        bottomGlow.addColorStop(1, "rgba(156, 3, 0, 0)");
+        ctx.fillStyle = bottomGlow;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.strokeStyle = "rgba(243, 238, 227, 0.16)";
+        ctx.lineWidth = 2;
+        roundRectPath(ctx, 26, 26, width - 52, height - 52, 28);
+        ctx.stroke();
+
+        ctx.fillStyle = "#e00700";
+        ctx.fillRect(26, 26, 196, 7);
+
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
+
+        ctx.fillStyle = "#ff1c0d";
+        ctx.font = "800 22px " + bodyFont;
+        if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
+        ctx.fillText("CALENDÁRIO ACADÊMICO · " + semester.label, padding, 118);
+        if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+
+        var title = event.title.toUpperCase();
+        var titleSize = 78;
+        var titleLines = [];
+
+        while (titleSize > 52) {
+          ctx.font = "400 " + titleSize + "px " + displayFont;
+          titleLines = wrapExportText(ctx, title, contentWidth);
+          if (titleLines.length <= 2) break;
+          titleSize -= 4;
+        }
+
+        ctx.font = "400 " + titleSize + "px " + displayFont;
+        titleLines = wrapExportText(ctx, title, contentWidth);
+
+        if (titleLines.length > 3) {
+          var lastLine = titleLines[2];
+
+          while (lastLine.length > 1 && ctx.measureText(lastLine + "…").width > contentWidth) {
+            lastLine = lastLine.slice(0, -1);
+          }
+
+          titleLines = [titleLines[0], titleLines[1], lastLine.trim() + "…"];
+        }
+
+        ctx.font = "400 " + titleSize + "px " + displayFont;
+
+        var titleBaseline = 208;
+        var titleLineHeight = titleSize * 1.02;
+
+        ctx.fillStyle = "#f3eee3";
+
+        titleLines.forEach(function (line, index) {
+          ctx.fillText(line, padding, titleBaseline + index * titleLineHeight);
+        });
+
+        var lastTitleBaseline = titleBaseline + (titleLines.length - 1) * titleLineHeight;
+        var dateBaseline = lastTitleBaseline + 56;
+
+        ctx.fillStyle = "#f3eee3";
+        ctx.font = "700 30px " + bodyFont;
+        ctx.fillText(formatExportDate(event), padding, dateBaseline);
+
+        var dividerY = dateBaseline + 32;
+
+        ctx.fillStyle = "#e00700";
+        ctx.fillRect(padding, dividerY, 96, 4);
+        ctx.fillStyle = "rgba(243, 238, 227, 0.14)";
+        ctx.fillRect(padding + 96, dividerY + 1, contentWidth - 96, 2);
+
+        var innerPadding = 32;
+        var columnWidth = (contentWidth - innerPadding * 2) / 7;
+        var rowHeight = 74;
+        var dayBox = 62;
+        var firstWeekday = new Date(year, monthIndex, 1).getDay();
+        var daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+        var totalRows = Math.ceil((firstWeekday + daysInMonth) / 7);
+        var panelHeight = 132 + totalRows * rowHeight + 26;
+        var contentTop = dividerY + 38;
+        var contentBottom = 1180;
+        var panelTop = contentTop + Math.max(0, (contentBottom - contentTop - panelHeight) / 2);
+
+        ctx.fillStyle = "#111010";
+        roundRectPath(ctx, padding, panelTop, contentWidth, panelHeight, 20);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(243, 238, 227, 0.14)";
+        ctx.lineWidth = 2;
+        roundRectPath(ctx, padding, panelTop, contentWidth, panelHeight, 20);
+        ctx.stroke();
+
+        ctx.fillStyle = "#f3eee3";
+        ctx.font = "400 44px " + displayFont;
+        ctx.textAlign = "left";
+        ctx.fillText(longMonths[monthIndex].toUpperCase() + " " + year, padding + innerPadding, panelTop + 60);
+
+        ctx.fillStyle = "#a9a29a";
+        ctx.font = "800 18px " + bodyFont;
+        ctx.textAlign = "center";
+
+        shortWeekdays.forEach(function (weekday, index) {
+          ctx.fillText(
+            weekday.toUpperCase(),
+            padding + innerPadding + columnWidth * index + columnWidth / 2,
+            panelTop + 104
+          );
+        });
+
+        var gridTop = panelTop + 124;
+
+        for (var row = 0; row < totalRows; row += 1) {
+          for (var column = 0; column < 7; column += 1) {
+            var dayNumber = row * 7 + column - firstWeekday + 1;
+
+            if (dayNumber < 1 || dayNumber > daysInMonth) continue;
+
+            var dayISO = year + "-" + pad2(monthIndex + 1) + "-" + pad2(dayNumber);
+            var isCovered = eventCoversDate(event, dayISO);
+            var isSelected = dayISO === iso;
+            var boxX = padding + innerPadding + column * columnWidth + (columnWidth - dayBox) / 2;
+            var boxY = gridTop + row * rowHeight + (rowHeight - dayBox) / 2;
+
+            if (isCovered || isSelected) {
+              ctx.fillStyle = isSelected ? "#f3eee3" : "#e00700";
+              roundRectPath(ctx, boxX, boxY, dayBox, dayBox, 13);
+              ctx.fill();
+
+              if (isSelected) {
+                ctx.strokeStyle = "#ff1c0d";
+                ctx.lineWidth = 4;
+                roundRectPath(ctx, boxX - 4, boxY - 4, dayBox + 8, dayBox + 8, 16);
+                ctx.stroke();
+              }
+            }
+
+            ctx.fillStyle = isSelected ? "#080707" : isCovered ? "#ffffff" : "rgba(243, 238, 227, 0.34)";
+            ctx.font = (isCovered ? "800 " : "600 ") + "24px " + bodyFont;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(String(dayNumber), boxX + dayBox / 2, boxY + dayBox / 2 + 1);
+            ctx.textBaseline = "alphabetic";
+          }
+        }
+
+        var footerCenterY = 1240;
+        var logoSize = 92;
+        var urlText = "dac-uerjzo.web.app";
+
+        ctx.font = "700 32px " + bodyFont;
+        var urlWidth = ctx.measureText(urlText).width;
+        var groupWidth = logoSize + 18 + urlWidth;
+        var groupX = (width - groupWidth) / 2;
+
+        if (logo) ctx.drawImage(logo, groupX, footerCenterY - logoSize / 2, logoSize, logoSize);
+
+        ctx.fillStyle = "#f3eee3";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText(urlText, groupX + logoSize + 18, footerCenterY + 1);
+        ctx.textBaseline = "alphabetic";
+
+        return canvas;
+      });
+    };
+
+    var canvasToBlob = function (canvas) {
+      return new Promise(function (resolve) {
+        if (canvas.toBlob) canvas.toBlob(resolve, "image/jpeg", 0.92);
+        else resolve(null);
+      });
+    };
+
+    var closeExportModal = function () {
+      if (!exportModal) return;
+
+      if (typeof exportModal.close === "function" && exportModal.open) exportModal.close();
+      else {
+        exportModal.removeAttribute("open");
+        document.body.classList.remove("is-locked");
+      }
+    };
+
+    var showExportModal = function () {
+      if (!exportModal) return;
+
+      if (typeof exportModal.showModal === "function") exportModal.showModal();
+      else exportModal.setAttribute("open", "");
+
+      document.body.classList.add("is-locked");
+    };
+
+    var openExportModal = function (scope) {
+      if (!exportModal || !exportImageElement || !scope.selection) return;
+
+      var selection = scope.selection;
+
+      exportButton.disabled = true;
+      exportButton.setAttribute("aria-busy", "true");
+
+      renderExportCanvas(scope.semester, selection.event, selection.iso)
+        .then(function (canvas) {
+          var dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+
+          exportFileName = buildExportFileName(selection.event);
+          exportImageElement.src = dataUrl;
+          exportImageElement.alt = "Calendário de " + longMonths[parseISO(selection.iso).getMonth()] +
+            " com destaque para " + selection.event.title;
+
+          if (exportDownloadLink) {
+            exportDownloadLink.href = dataUrl;
+            exportDownloadLink.download = exportFileName;
+          }
+
+          if (exportMetaElement) {
+            exportMetaElement.textContent = selection.event.title + " · " + formatEventDate(selection.event);
+          }
+
+          return canvasToBlob(canvas).then(function (blob) {
+            exportBlob = blob;
+          });
+        })
+        .then(function () {
+          if (exportShareButton) exportShareButton.hidden = !exportBlob;
+          showExportModal();
+        })
+        .catch(function (error) {
+          if (window.console && window.console.error) window.console.error("Falha ao gerar imagem do calendário", error);
+          exportButton.textContent = "Tente de novo";
+
+          window.setTimeout(function () {
+            exportButton.textContent = "Compartilhar data";
+          }, 2400);
+        })
+        .then(function () {
+          exportButton.disabled = false;
+          exportButton.removeAttribute("aria-busy");
+        });
+    };
+
+    exportButton.addEventListener("click", function () {
+      openExportModal(panels[activeIndex]);
+    });
+
+    if (exportModal) {
+      exportModal.addEventListener("click", function (event) {
+        if (event.target === exportModal) closeExportModal();
+      });
+
+      exportModal.addEventListener("close", function () {
+        document.body.classList.remove("is-locked");
+        exportButton.focus();
+      });
+    }
+
+    if (exportCloseButton) exportCloseButton.addEventListener("click", closeExportModal);
+
+    if (exportShareButton) {
+      exportShareButton.addEventListener("click", function () {
+        if (!exportBlob || !exportFileName) return;
+
+        if (typeof File !== "function") {
+          if (exportDownloadLink) exportDownloadLink.click();
+          return;
+        }
+
+        var file = new File([exportBlob], exportFileName, { type: "image/jpeg" });
+        var shareData = {
+          files: [file],
+          title: "Calendário acadêmico — DAC UERJ ZO",
+          text: exportMetaElement ? exportMetaElement.textContent : ""
+        };
+
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+          navigator.share(shareData).catch(function () {});
+          return;
+        }
+
+        if (exportDownloadLink) exportDownloadLink.click();
+
+        if (exportMetaElement) {
+          exportMetaElement.textContent = "Compartilhamento não disponível neste navegador. A imagem foi baixada.";
+        }
+      });
+    }
   }
 
   /* ---------- Carrossel de membros ---------- */

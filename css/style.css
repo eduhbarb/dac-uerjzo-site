@@ -1088,6 +1088,161 @@ button.calendar-day {
 .calendar-noscript p + p { margin-top: 8px; }
 .calendar-noscript strong { color: var(--paper); }
 
+/* ---------- Exportação do calendário ---------- */
+
+.calendar-export {
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  width: min(224px, calc(100vw - 32px));
+  min-height: 54px;
+  padding: 0 12px;
+  border: 1px solid var(--red);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 2px 2px, rgba(224, 7, 0, 0.3) 1.1px, transparent 1.5px) 0 0 / 9px 9px,
+    radial-gradient(ellipse at 50% 0%, rgba(224, 7, 0, 0.22), transparent 72%),
+    #170303;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: clamp(0.85rem, 2vw, 1.15rem);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    inset 4px 0 0 rgba(224, 7, 0, 0.6),
+    0 16px 38px rgba(0, 0, 0, 0.6);
+  transform: translateX(-50%);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.calendar-export[hidden] { display: none; }
+
+.calendar-export:hover {
+  border-color: var(--red-bright);
+  background:
+    radial-gradient(circle at 2px 2px, rgba(255, 28, 13, 0.34) 1.1px, transparent 1.5px) 0 0 / 9px 9px,
+    radial-gradient(ellipse at 50% 0%, rgba(224, 7, 0, 0.32), transparent 72%),
+    #230504;
+  box-shadow:
+    inset 4px 0 0 rgba(255, 28, 13, 0.6),
+    0 18px 42px rgba(0, 0, 0, 0.66),
+    0 0 24px rgba(224, 7, 0, 0.22);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.calendar-export:active { transform: translateX(-50%); }
+
+.calendar-export:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 3px;
+}
+
+.calendar-export[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+
+.calendar-modal {
+  width: min(560px, calc(100vw - 28px));
+  max-width: none;
+  max-height: calc(100svh - 20px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgba(243, 238, 227, 0.2);
+  border-radius: 20px;
+  background: #0c0b0b;
+  color: var(--paper);
+  overflow: hidden;
+}
+
+.calendar-modal::backdrop {
+  background: rgba(4, 3, 3, 0.84);
+  backdrop-filter: blur(6px);
+}
+
+.calendar-modal[open] { animation: flow-in 0.24s ease-out; }
+
+.calendar-modal-inner {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100svh - 20px);
+}
+
+.calendar-modal-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--line);
+  background: radial-gradient(ellipse at 0% 0%, rgba(224, 7, 0, 0.18), transparent 62%);
+}
+
+.calendar-modal-heading { min-width: 0; }
+
+.calendar-modal-head .kicker {
+  margin-bottom: 8px;
+  font-size: 0.58rem;
+}
+
+.calendar-modal-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.calendar-modal-meta {
+  margin-top: 6px;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.calendar-modal-body {
+  flex: 0 1 auto;
+  min-height: 0;
+  padding: 15px 16px 18px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(224, 7, 0, 0.6) transparent;
+}
+
+.calendar-modal-preview {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #080707;
+  overflow: hidden;
+}
+
+.calendar-modal-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 56svh;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.calendar-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.calendar-modal-actions [hidden] { display: none; }
+
+@media (max-width: 460px) {
+  .calendar-modal-actions { grid-template-columns: 1fr; }
+}
+
+
 /* =========================================================
    3. RECEPÇÃO DE CALOUROS
    ========================================================= */
