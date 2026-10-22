@@ -39,20 +39,33 @@
       {
         id: "2026-1",
         label: "2026.1",
-        start: "2026-07-17",
-        end: "2026-11-17",
+        start: "2026-03-09",
+        end: "2026-10-31",
         months: [
+          { year: 2026, month: 2 },
           { year: 2026, month: 6 },
           { year: 2026, month: 9 },
           { year: 2026, month: 10 }
         ],
         events: [
           {
+            id: "abertura-2026-1",
+            title: "Abertura do semestre",
+            start: "2026-03-09",
+            description: "Primeiro dia de aulas do período letivo 2026.1."
+          },
+          {
+            id: "reinicio-aulas-2026-1",
+            title: "Reinício das aulas",
+            start: "2026-07-13",
+            description: "Retorno das atividades letivas após o recesso de meio de ano."
+          },
+          {
             id: "ajuste-2026-1",
-            title: "Ajuste de grade (SAID)",
+            title: "Reabertura do SAID",
             start: "2026-07-17",
             end: "2026-07-24",
-            description: "Alteração de disciplinas pelo SAID, de 17 a 24 de julho. Confirme as regras e os prazos no Aluno Online."
+            description: "Cancelamento, reinscrição e subscrição em disciplinas pelo SAID, de 17 a 24 de julho. Confirme as regras e os prazos no Aluno Online."
           },
           {
             id: "termino-aulas-2026-1",
@@ -61,15 +74,35 @@
             description: "Último dia de aulas do período letivo 2026.1."
           },
           {
-            id: "avaliacoes-finais-2026-1",
-            title: "Avaliações finais",
+            id: "exames-finais-credito-2026-1",
+            title: "Exames finais (regime de crédito)",
             start: "2026-10-29",
             end: "2026-10-31",
-            description: "Exames finais do período. Confirme horários e salas com cada disciplina."
+            description: "Exames finais do regime de crédito, de 29 a 31 de outubro. Confirme horários e salas com cada disciplina."
+          },
+          {
+            id: "exames-finais-seriado-2026-1",
+            title: "Exames finais (regime seriado)",
+            start: "2026-10-29",
+            end: "2026-10-30",
+            description: "Exames finais do regime seriado, de 29 a 30 de outubro."
+          },
+          {
+            id: "rfn-2026-1",
+            title: "RFN",
+            start: "2026-10-29",
+            end: "2026-10-31",
+            description: "Relatório de frequências e notas, de 29 a 31 de outubro."
+          },
+          {
+            id: "segunda-epoca-2026-1",
+            title: "Exames de 2ª época",
+            start: "2026-10-31",
+            description: "Requerimento e realização dos exames de 2ª época em 31 de outubro."
           },
           {
             id: "fechamento-2026-1",
-            title: "Fechamento do semestre",
+            title: "Término do semestre",
             start: "2026-10-31",
             description: "Encerramento oficial do semestre 2026.1."
           },
@@ -78,7 +111,7 @@
             title: "Férias docentes",
             start: "2026-11-03",
             end: "2026-11-17",
-            description: "Interstício entre os períodos letivos, com férias docentes e sem aulas."
+            description: "Período de férias docentes, entre os semestres letivos, sem aulas."
           }
         ]
       },
@@ -91,9 +124,23 @@
           { year: 2026, month: 10 },
           { year: 2026, month: 11 },
           { year: 2027, month: 0 },
-          { year: 2027, month: 3 }
+          { year: 2027, month: 3 },
+          { year: 2027, month: 4 }
         ],
         events: [
+          {
+            id: "inscricao-2026-2",
+            title: "Inscrição em disciplinas",
+            start: "2026-11-11",
+            end: "2026-11-14",
+            description: "Matrícula e escolha de matérias, de 11 a 14 de novembro, pelo Aluno Online."
+          },
+          {
+            id: "rid-2026-2",
+            title: "Divulgação do RID",
+            start: "2026-11-17",
+            description: "Divulgação do Relatório de Inscrição em Disciplinas (RID)."
+          },
           {
             id: "abertura-2026-2",
             title: "Abertura do semestre",
@@ -102,21 +149,21 @@
           },
           {
             id: "ajuste-2026-2",
-            title: "Ajuste de grade (SAID)",
+            title: "SAID (cancelamento e reinscrição)",
             start: "2026-11-18",
             end: "2026-12-02",
-            description: "Modificações na matrícula pelo SAID, de 18 de novembro a 2 de dezembro."
+            description: "Cancelamento, reinscrição e subscrição em disciplinas pelo SAID, de 18 de novembro a 2 de dezembro."
           },
           {
             id: "recesso-fim-de-ano",
-            title: "Recesso de fim de ano",
+            title: "Recesso natalino",
             start: "2026-12-23",
             end: "2027-01-03",
-            description: "Recesso institucional de fim de ano. Não há atividades acadêmicas."
+            description: "Recesso de fim de ano. Não há atividades acadêmicas."
           },
           {
             id: "ferias-docentes-2027",
-            title: "Férias docentes",
+            title: "Férias docentes (1º período)",
             start: "2027-01-04",
             end: "2027-01-18",
             description: "Férias docentes com aulas suspensas."
@@ -125,13 +172,54 @@
             id: "termino-aulas-2026-2",
             title: "Término das aulas",
             start: "2027-04-17",
-            description: "Término das atividades letivas do período 2026.2."
+            description: "Término das aulas regulares do período 2026.2."
+          },
+          {
+            id: "exames-finais-credito-2026-2",
+            title: "Exames finais (regime de crédito)",
+            start: "2027-04-19",
+            end: "2027-04-24",
+            description: "Exames finais do regime de crédito, de 19 a 24 de abril. Confirme horários e salas com cada disciplina."
+          },
+          {
+            id: "exames-finais-seriado-2026-2",
+            title: "Exames finais (regime seriado)",
+            start: "2027-04-19",
+            end: "2027-04-20",
+            description: "Exames finais do regime seriado, de 19 a 20 de abril."
+          },
+          {
+            id: "rfn-2026-2",
+            title: "RFN",
+            start: "2027-04-19",
+            end: "2027-04-24",
+            description: "Relatório de frequências e notas, de 19 a 24 de abril."
+          },
+          {
+            id: "segunda-epoca-requerimento-2026-2",
+            title: "Exames de 2ª época — requerimento",
+            start: "2027-04-22",
+            description: "Prazo final para requerer os exames de 2ª época."
+          },
+          {
+            id: "segunda-epoca-2026-2",
+            title: "Exames de 2ª época",
+            start: "2027-04-22",
+            end: "2027-04-24",
+            description: "Realização dos exames de 2ª época, de 22 a 24 de abril."
           },
           {
             id: "fechamento-2026-2",
-            title: "Fechamento do semestre",
+            title: "Término do semestre",
             start: "2027-04-24",
             description: "Encerramento oficial do semestre 2026.2."
+          },
+          {
+            id: "ferias-docentes-2-2027",
+            title: "Férias docentes (2º período)",
+            start: "2027-04-26",
+            end: "2027-05-10",
+            description: "Período pós-semestre, com férias docentes e sem aulas."
           }
         ]
       }
