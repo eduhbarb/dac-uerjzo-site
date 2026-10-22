@@ -16,7 +16,8 @@ dac logo.png
 /.opencode/
 
 # Firebase CLI local
-firebase-debug.log*.firebase/
+firebase-debug.log*
+.firebase/
 
 # Documentos-fonte (nao publicar)
 *.pdf
