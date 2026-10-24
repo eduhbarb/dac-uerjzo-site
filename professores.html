@@ -41,6 +41,49 @@
     </div>
   </header>
 
+  <div class="nav-scrim" data-nav-scrim aria-hidden="true"></div>
+
+  <nav class="hero-strips hero-strips--page" id="acessos-rapidos" data-quick-nav aria-label="Acessos rápidos">
+    <a class="hero-strip" href="tccs.html">
+      <span class="hero-strip-title">TCCs</span>
+      <span class="hero-strip-desc">Confira os TCCs já concluídos</span>
+      <span class="hero-strip-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="hero-strip" href="calendario.html">
+      <span class="hero-strip-title">Calendário</span>
+      <span class="hero-strip-desc">Fique de olho no calendário acadêmico</span>
+      <span class="hero-strip-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="hero-strip" href="ouvidoria.html">
+      <span class="hero-strip-title">Ouvidoria</span>
+      <span class="hero-strip-desc">Denúncias, queixas e elogios</span>
+      <span class="hero-strip-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="hero-strip" href="fluxogramas.html">
+      <span class="hero-strip-title">Fluxograma</span>
+      <span class="hero-strip-desc">Matriz curricular de CC e TADS</span>
+      <span class="hero-strip-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="hero-strip" href="professores.html" aria-current="page">
+      <span class="hero-strip-title">Professores</span>
+      <span class="hero-strip-desc">Quem ensina em CC e TADS</span>
+      <span class="hero-strip-arrow" aria-hidden="true">↗</span>
+    </a>
+  </nav>
+
+  <div class="nav-dock">
+    <a class="nav-home" href="index.html" aria-label="Voltar para a página inicial">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M3 10.6 12 3.4l9 7.2"/>
+        <path d="M5.6 9.4V20.6h12.8V9.4"/>
+        <path d="M9.8 20.6v-6.2h4.4v6.2"/>
+      </svg>
+    </a>
+    <button class="nav-fab" type="button" data-nav-fab aria-expanded="false" aria-controls="acessos-rapidos" aria-label="Abrir acessos rápidos">
+      <span class="nav-fab-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </div>
+
   <main class="subpage-main subpage-main--professores" id="conteudo">
     <div class="container">
       <p class="kicker"><span class="kicker-mark" aria-hidden="true"></span>Corpo docente · CC e TADS</p>
@@ -101,6 +144,33 @@
                   <!-- Links pendentes. Quando houver, troque o <span> por:
                        <a class="teacher-link" href="...">Currículo Lattes <span aria-hidden="true">↗</span></a> -->
                   <span class="teacher-link teacher-link--pending">Currículo Lattes <span aria-hidden="true">↗</span></span>
+                  <span class="teacher-link teacher-link--pending">LinkedIn <span aria-hidden="true">↗</span></span>
+                </div>
+              </article>
+            </div>
+          </li>
+
+          <li class="teacher-card" tabindex="0" aria-label="Thilene Falcão Luiz — ver currículo e contatos">
+            <div class="teacher-card-inner">
+              <article class="teacher-face teacher-face--front">
+                <div class="teacher-photo">
+                  <img src="assets/professores/thilene-falcao-luiz.jpg" alt="Foto de Thilene Falcão Luiz" width="1179" height="1334" loading="lazy">
+                  <span class="teacher-index" aria-hidden="true">03</span>
+                </div>
+                <div class="teacher-info">
+                  <h3>Thilene Falcão Luiz</h3>
+                  <p class="teacher-subjects">Cálculo II · Geometria Analítica · Matemática Discreta</p>
+                </div>
+              </article>
+
+              <article class="teacher-face teacher-face--back">
+                <span class="teacher-back-mark" aria-hidden="true">CC &amp; TADS</span>
+                <p class="teacher-back-kicker">Currículo e contatos</p>
+                <p class="teacher-back-name">Thilene Falcão Luiz</p>
+                <div class="teacher-links">
+                  <a class="teacher-link teacher-link--primary" href="http://lattes.cnpq.br/1561314215228078" target="_blank" rel="noopener">Currículo Lattes <span aria-hidden="true">↗</span></a>
+                  <!-- LinkedIn pendente. Quando houver, troque o <span> por:
+                       <a class="teacher-link" href="...">LinkedIn <span aria-hidden="true">↗</span></a> -->
                   <span class="teacher-link teacher-link--pending">LinkedIn <span aria-hidden="true">↗</span></span>
                 </div>
               </article>
